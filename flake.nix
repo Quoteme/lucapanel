@@ -15,28 +15,27 @@
         pkgs = import nixpkgs { inherit system; };
         flutterDependencies = with pkgs; [
           flutter
-          pcre2
+          cmake
+          ninja
+          bear
           fontconfig
+          pkg-config
           # Dependencies for flutter
           glib
           at-spi2-core.dev
-          clang
-          cmake
-          dart
           dbus.dev
           # flutter
-          gtk3
-          libdatrie
-          libepoxy
-          libselinux
-          libsepol
-          libthai
-          libxkbcommon
-          ninja
-          pcre
-          pkg-config
+          gtk3.dev
+          libdatrie.dev
+          libepoxy.dev
+          libselinux.dev
+          libsepol.dev
+          libthai.dev
+          libxkbcommon.dev
+          pcre.dev
+          pcre2.dev
           util-linux.dev
-          xorg.libXdmcp
+          xorg.libXdmcp.dev
           xorg.libXtst
           cairo.dev
           lerc.dev
@@ -60,6 +59,10 @@
         });
 
         devShells.default = with pkgs; (mkShell.override { stdenv = clangStdenv; } {
+          nativeBuildInputs = [
+            pkg-config
+            clang-tools
+          ];
           buildInputs = flutterDependencies;
         });
       }
