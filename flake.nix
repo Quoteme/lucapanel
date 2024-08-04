@@ -18,6 +18,7 @@
           pcre2
           fontconfig
           # Dependencies for flutter
+          glib
           at-spi2-core.dev
           clang
           cmake
@@ -41,8 +42,9 @@
         ];
       in
       rec {
+
         defaultPackage = packages.lucapanel;
-        packages.lucapanel = with pkgs; stdenv.mkDerivation (finalAttrs: {
+        packages.lucapanel = with pkgs; clangStdenv.mkDerivation (finalAttrs: {
           pname = "lucapanel";
           version = "1.0";
 
@@ -56,9 +58,9 @@
           ];
         });
 
-        devShells.default = with pkgs; mkShell {
+        devShells.default = with pkgs; (mkShell.override { stdenv = clangStdenv; } {
           buildInputs = flutterDependencies;
-        };
+        });
       }
     );
 }
