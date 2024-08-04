@@ -16,6 +16,19 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
+void set_net_wm_strut_partial(GtkWindow *window) {
+  GdkWindow *gdkWindow = gtk_widget_get_window(GTK_WIDGET(window));
+  Display *display = GDK_WINDOW_XDISPLAY(gdkWindow);
+  Window xwindow = GDK_WINDOW_XID(gdkWindow);
+
+  Atom property = XInternAtom(display, "_NET_WM_STRUT_PARTIAL", False);
+  long strut[12] = {0, 0, 22, 0, 0, 0, 0, 0, 0, 1919, 0, 0};
+
+  XChangeProperty(display, xwindow, property, XA_CARDINAL, 32, PropModeReplace,
+                  (unsigned char *)strut, 12);
+  XFlush(display);
+}
+
 // Implements GApplication::activate.
 static void my_application_activate(GApplication *application) {
   MyApplication *self = MY_APPLICATION(application);
@@ -40,16 +53,7 @@ static void my_application_activate(GApplication *application) {
   gtk_widget_grab_focus(GTK_WIDGET(view));
 
   // we now wish to set the _NET_WM_WINDOW_TYPE property on the window
-  GdkWindow *gdkWindow = gtk_widget_get_window(GTK_WIDGET(window));
-  Display *display = GDK_WINDOW_XDISPLAY(gdkWindow);
-  Window xwindow = GDK_WINDOW_XID(gdkWindow);
-
-  Atom property = XInternAtom(display, "_NET_WM_STRUT_PARTIAL", False);
-  long strut[12] = {0, 0, 22, 0, 0, 0, 0, 0, 0, 1919, 0, 0};
-
-  XChangeProperty(display, xwindow, property, XA_CARDINAL, 32, PropModeReplace,
-                  (unsigned char *)strut, 12);
-  XFlush(display);
+  set_net_wm_strut_partial(window);
 }
 
 // Implements GApplication::local_command_line.
