@@ -15,7 +15,7 @@
         pkgs = import nixpkgs { inherit system; };
         flutterDependencies = with pkgs; [
           flutter
-          pcre
+          pcre2
           fontconfig
           # Dependencies for flutter
           at-spi2-core.dev
@@ -57,13 +57,6 @@
         });
 
         devShells.default = with pkgs; mkShell {
-          NIX_LD_LIBRARY_PATH = lib.makeLibraryPath ([
-            stdenv.cc.cc
-            openssl
-          ] ++ flutterDependencies);
-          NIX_LD = runCommand "ld.so" { } ''
-            ln -s "$(cat '${pkgs.stdenv.cc}/nix-support/dynamic-linker')" $out
-          '';
           buildInputs = flutterDependencies;
         };
       }
