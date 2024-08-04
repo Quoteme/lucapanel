@@ -39,6 +39,7 @@
           xorg.libXdmcp
           xorg.libXtst
           cairo.dev
+          lerc.dev
         ];
       in
       rec {
