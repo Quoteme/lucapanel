@@ -18,10 +18,19 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
+          brightness: Brightness.dark,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.deepPurple, brightness: Brightness.dark),
+          useMaterial3: true,
+          tooltipTheme: TooltipThemeData(
+            decoration: BoxDecoration(
+              color: Colors.black, // Dark background
+              borderRadius: BorderRadius.circular(4),
+            ),
+            textStyle: TextStyle(
+              color: Colors.white, // White text
+            ),
+          )),
       themeMode: ThemeMode.dark, // Use dark theme
       home: const Homescreen(),
     );
