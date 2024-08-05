@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucapanel/widgets/batterywidget.dart';
 import 'package:lucapanel/widgets/calendarwidget.dart';
+import 'package:lucapanel/widgets/windowlistwidget.dart';
 
 class Homescreen extends StatelessWidget {
   const Homescreen({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class Homescreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('...'),
+            WindowlistWidget(),
             Row(
               children: [
                 CalendarWidget(),
