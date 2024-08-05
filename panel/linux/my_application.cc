@@ -1,5 +1,6 @@
 #include "my_application.h"
 #include "gdk/gdk.h"
+#include "gtk/gtk.h"
 
 #include <flutter_linux/flutter_linux.h>
 #ifdef GDK_WINDOWING_X11
@@ -22,7 +23,7 @@ void set_net_wm_strut_partial(GtkWindow *window) {
   Window xwindow = GDK_WINDOW_XID(gdkWindow);
 
   Atom property = XInternAtom(display, "_NET_WM_STRUT_PARTIAL", False);
-  long strut[12] = {0, 0, 22, 0, 0, 0, 0, 0, 0, 1919, 0, 0};
+  long strut[12] = {0, 0, 32, 0, 0, 0, 0, 0, 0, 1919, 0, 0};
 
   XChangeProperty(display, xwindow, property, XA_CARDINAL, 32, PropModeReplace,
                   (unsigned char *)strut, 12);
@@ -36,7 +37,11 @@ static void my_application_activate(GApplication *application) {
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
   gtk_window_set_title(window, "lucapanel");
-  gtk_window_set_default_size(window, 1280, 720);
+  gtk_window_set_gravity(window, GDK_GRAVITY_STATIC);
+  gtk_window_set_default_size(window, 1280, 32);
+  gtk_window_move(window, 0, 0);
+  gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DOCK);
+  gtk_window_set_role(window, "Panel");
 
   gtk_widget_show(GTK_WIDGET(window));
 
@@ -52,7 +57,6 @@ static void my_application_activate(GApplication *application) {
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 
-  // we now wish to set the _NET_WM_WINDOW_TYPE property on the window
   set_net_wm_strut_partial(window);
 }
 
