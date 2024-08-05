@@ -15,34 +15,36 @@
         pkgs = import nixpkgs { inherit system; };
         flutterDependencies = with pkgs; [
           flutter
-          pcre2
-          fontconfig
-          # Dependencies for flutter
-          at-spi2-core.dev
-          clang
           cmake
-          dart
+          ninja
+          bear
+          fontconfig
+          pkg-config
+          # Dependencies for flutter
+          glib
+          at-spi2-core.dev
           dbus.dev
           # flutter
-          gtk3
-          libdatrie
-          libepoxy
-          libselinux
-          libsepol
-          libthai
-          libxkbcommon
-          ninja
-          pcre
-          pkg-config
+          gtk3.dev
+          libdatrie.dev
+          libepoxy.dev
+          libselinux.dev
+          libsepol.dev
+          libthai.dev
+          libxkbcommon.dev
+          pcre.dev
+          pcre2.dev
           util-linux.dev
-          xorg.libXdmcp
+          xorg.libXdmcp.dev
           xorg.libXtst
           cairo.dev
+          lerc.dev
         ];
       in
       rec {
+
         defaultPackage = packages.lucapanel;
-        packages.lucapanel = with pkgs; stdenv.mkDerivation (finalAttrs: {
+        packages.lucapanel = with pkgs; clangStdenv.mkDerivation (finalAttrs: {
           pname = "lucapanel";
           version = "1.0";
 
@@ -56,9 +58,13 @@
           ];
         });
 
-        devShells.default = with pkgs; mkShell {
+        devShells.default = with pkgs; (mkShell.override { stdenv = clangStdenv; } {
+          nativeBuildInputs = [
+            pkg-config
+            clang-tools
+          ];
           buildInputs = flutterDependencies;
-        };
+        });
       }
     );
 }

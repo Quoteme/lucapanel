@@ -1,1 +1,0 @@
- /home/luca/Dokumente/dev/lucapanel/panel/.dart_tool/flutter_build/71ecade67155f0c4a6f491c98c7b20a9/native_assets.yaml: 
