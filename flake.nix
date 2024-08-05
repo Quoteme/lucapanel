@@ -40,6 +40,9 @@
           cairo.dev
           lerc.dev
         ];
+        additionalDependencies = with pkgs; [
+          brightnessctl
+        ];
       in
       rec {
 
@@ -63,7 +66,7 @@
             pkg-config
             clang-tools
           ];
-          buildInputs = flutterDependencies;
+          buildInputs = flutterDependencies ++ additionalDependencies;
         });
       }
     );
