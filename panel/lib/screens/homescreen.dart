@@ -13,7 +13,7 @@ class Homescreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            const Text('...'),
+            WorkspacesWidget(),
             Row(
                 children: [
               const ScreenBrightnessWidget(),
