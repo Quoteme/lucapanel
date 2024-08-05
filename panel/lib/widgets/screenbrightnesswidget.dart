@@ -17,17 +17,19 @@ class _ScreenBrightnessWidgetState extends State<ScreenBrightnessWidget> {
   double? get _brightnessPercentage =>
       _brightness != null ? (_brightness! / _maxBrightness) : null;
 
-  get _brightnessSlider => _brightnessPercentage == null
-      ? const SizedBox()
-      : Slider(
-          value: _brightnessPercentage!,
-          allowedInteraction: SliderInteraction.tapOnly,
-          onChanged: (x) async {
-            print("lal");
-            brightness = (x * _maxBrightness).round();
-            _getBrightness();
-            setState(() {});
-          });
+  Widget get _brightnessSlider => AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      child: !_expanded
+          ? const SizedBox()
+          : Slider(
+              value: _brightnessPercentage!,
+              allowedInteraction: SliderInteraction.tapOnly,
+              onChanged: (x) async {
+                print("lal");
+                brightness = (x * _maxBrightness).round();
+                _getBrightness();
+                setState(() {});
+              }));
 
   @override
   void initState() {
@@ -39,13 +41,23 @@ class _ScreenBrightnessWidgetState extends State<ScreenBrightnessWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        _brightnessSlider,
         _toggleExpandeIcon,
-        if (_expanded) ...[
-          const SizedBox(width: 10),
-          _brightnessSlider,
-        ],
       ],
     );
+  }
+
+  Icon get _icon {
+    switch (_brightnessPercentage) {
+      case null:
+        return const Icon(Icons.brightness_medium, color: Colors.grey);
+      case <= 1 / 3:
+        return const Icon(Icons.brightness_low);
+      case <= 2 / 3:
+        return const Icon(Icons.brightness_medium);
+      default:
+        return const Icon(Icons.brightness_high);
+    }
   }
 
   // icon with gesture detector
@@ -55,10 +67,7 @@ class _ScreenBrightnessWidgetState extends State<ScreenBrightnessWidget> {
             _expanded = !_expanded;
           });
         },
-        child: const Icon(
-          Icons.brightness_medium,
-          color: Colors.white,
-        ),
+        child: _icon,
       );
 
   void _getBrightness() async {
