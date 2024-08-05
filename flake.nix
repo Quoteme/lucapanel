@@ -42,6 +42,7 @@
         ];
         additionalDependencies = with pkgs; [
           brightnessctl
+          wmctrl
         ];
       in
       rec {
