@@ -8,19 +8,21 @@ class Homescreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('...'),
+            const Text('...'),
             Row(
-              children: [
-                ScreenBrightnessWidget(),
-                CalendarWidget(),
-                BatteryWidget(),
-              ],
-            )
+                children: [
+              const ScreenBrightnessWidget(),
+              const CalendarWidget(),
+              const BatteryWidget(),
+            ]
+                    .map((e) => Padding(
+                        padding: const EdgeInsets.only(left: 10), child: e))
+                    .toList())
           ],
         ),
       ),
