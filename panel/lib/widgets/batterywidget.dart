@@ -35,11 +35,9 @@ class _BatteryWidgetState extends State<BatteryWidget> {
       });
     });
     Battery().onBatteryStateChanged.listen((BatteryState state) {
-      if (state == BatteryState.full) {
-        setState(() {
-          _batteryLevel = 100;
-        });
-      }
+      setState(() {
+        _batteryState = state;
+      });
     });
   }
 
@@ -73,9 +71,11 @@ class _BatteryWidgetState extends State<BatteryWidget> {
       case BatteryState.charging:
         return Colors.lightGreen;
       case BatteryState.discharging:
-        return Colors.red;
+        return _batteryLevel != null && _batteryLevel! < 20
+            ? Colors.red
+            : Colors.yellow;
       case BatteryState.connectedNotCharging:
-        return Colors.orange;
+        return Colors.blue;
       case BatteryState.full:
         return Colors.green;
       default:
