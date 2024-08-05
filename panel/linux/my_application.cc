@@ -17,12 +17,6 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
-void get_monitor_width_and_height(GdkWindow *gdkWindow, int *width,
-                                  int *height) {
-  *width = 1919;
-  *height = 1080;
-}
-
 void set_net_wm_strut_partial(GtkWindow *window, int width = 1200,
                               int height = 32) {
   GdkWindow *gdkWindow = gtk_widget_get_window(GTK_WIDGET(window));
@@ -44,11 +38,8 @@ static void my_application_activate(GApplication *application) {
   GtkWindow *window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
-  int screen_width, screen_height;
-  int panel_height = 32;
-  // print the monitor width and height
-  get_monitor_width_and_height(gtk_widget_get_window(GTK_WIDGET(window)),
-                               &screen_width, &screen_height);
+  const int screen_width = 1919;
+  const int panel_height = 32;
 
   gtk_window_set_title(window, "lucapanel");
   gtk_window_set_gravity(window, GDK_GRAVITY_STATIC);
