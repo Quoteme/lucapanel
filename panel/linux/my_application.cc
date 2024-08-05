@@ -17,13 +17,21 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
-void set_net_wm_strut_partial(GtkWindow *window) {
+void get_monitor_width_and_height(GdkWindow *gdkWindow, int *width,
+                                  int *height) {
+  *width = 1919;
+  *height = 1080;
+}
+
+void set_net_wm_strut_partial(GtkWindow *window, int width = 1200,
+                              int height = 32) {
   GdkWindow *gdkWindow = gtk_widget_get_window(GTK_WIDGET(window));
   Display *display = GDK_WINDOW_XDISPLAY(gdkWindow);
+
   Window xwindow = GDK_WINDOW_XID(gdkWindow);
 
   Atom property = XInternAtom(display, "_NET_WM_STRUT_PARTIAL", False);
-  long strut[12] = {0, 0, 32, 0, 0, 0, 0, 0, 0, 1919, 0, 0};
+  long strut[12] = {0, 0, height, 0, 0, 0, 0, 0, 0, width, 0, 0};
 
   XChangeProperty(display, xwindow, property, XA_CARDINAL, 32, PropModeReplace,
                   (unsigned char *)strut, 12);
@@ -36,9 +44,15 @@ static void my_application_activate(GApplication *application) {
   GtkWindow *window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
+  int screen_width, screen_height;
+  int panel_height = 32;
+  // print the monitor width and height
+  get_monitor_width_and_height(gtk_widget_get_window(GTK_WIDGET(window)),
+                               &screen_width, &screen_height);
+
   gtk_window_set_title(window, "lucapanel");
   gtk_window_set_gravity(window, GDK_GRAVITY_STATIC);
-  gtk_window_set_default_size(window, 1280, 32);
+  gtk_window_set_default_size(window, screen_width, panel_height);
   gtk_window_move(window, 0, 0);
   gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DOCK);
   gtk_window_set_role(window, "Panel");
@@ -57,7 +71,7 @@ static void my_application_activate(GApplication *application) {
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 
-  set_net_wm_strut_partial(window);
+  set_net_wm_strut_partial(window, screen_width, panel_height);
 }
 
 // Implements GApplication::local_command_line.
