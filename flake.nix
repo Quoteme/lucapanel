@@ -39,6 +39,14 @@
           xorg.libXtst
           cairo.dev
           lerc.dev
+          alsa-lib.dev
+        ];
+        additionalDependencies = with pkgs; [
+          brightnessctl
+          wmctrl
+        ];
+        developmentTools = with pkgs; [
+          d-spy # inspecting DBUS interfaces / generating xml files for DBUS interfaces
         ];
       in
       rec {
@@ -63,7 +71,7 @@
             pkg-config
             clang-tools
           ];
-          buildInputs = flutterDependencies;
+          buildInputs = flutterDependencies ++ additionalDependencies ++ developmentTools;
         });
       }
     );
