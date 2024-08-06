@@ -13,13 +13,15 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        flutterDependencies = with pkgs; [
+        flutterTooling = with pkgs; [
           flutter
           cmake
           ninja
           bear
-          fontconfig
           pkg-config
+        ];
+        flutterDependencies = with pkgs; [
+          fontconfig
           # Dependencies for flutter
           glib
           at-spi2-core.dev
@@ -39,7 +41,7 @@
           xorg.libXtst
           cairo.dev
           lerc.dev
-          alsa-lib.dev
+          alsa-lib
         ];
         additionalDependencies = with pkgs; [
           brightnessctl
@@ -52,18 +54,16 @@
       rec {
 
         defaultPackage = packages.lucapanel;
-        packages.lucapanel = with pkgs; clangStdenv.mkDerivation (finalAttrs: {
+        packages.lucapanel = with pkgs; flutter322.buildFlutterApplication (rec {
           pname = "lucapanel";
-          version = "1.0";
+          version = "0.0.1";
 
-          src = ./.;
+          nativeBuildInputs = [ pkg-config clang-tools ];
 
-          nativeBuildInputs = [
-            makeWrapper
-          ];
-          buildInputs = [
-            flutter
-          ];
+          buildInputs = flutterDependencies;
+
+          src = ./panel;
+          autoPubspecLock = ./panel/pubspec.lock;
         });
 
         devShells.default = with pkgs; (mkShell.override { stdenv = clangStdenv; } {
@@ -71,7 +71,7 @@
             pkg-config
             clang-tools
           ];
-          buildInputs = flutterDependencies ++ additionalDependencies ++ developmentTools;
+          buildInputs = flutterTooling ++ flutterDependencies ++ additionalDependencies ++ developmentTools;
         });
       }
     );
