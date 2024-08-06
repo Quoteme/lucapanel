@@ -23,7 +23,6 @@ class SensorWidget extends StatelessWidget {
                     snapshot.data!.length, (j) => snapshot.data![j][i]));
             var avgs =
                 transposed.map((v) => v.reduce((a, b) => a + b) / v.length);
-            var avg = avgs.reduce((a, b) => a + b / avgs.length);
             return Tooltip(
               message: sensor.sensorName,
               preferBelow: false,
@@ -49,7 +48,8 @@ class SensorWidget extends StatelessWidget {
                       ),
                     ),
                     Center(
-                        child: Text("${avg.toStringAsFixed(2)}${sensor.unit}")),
+                        child: Text(
+                            "${avgs.last.toStringAsFixed(2)}${sensor.unit}")),
                   ],
                 ),
               ),
