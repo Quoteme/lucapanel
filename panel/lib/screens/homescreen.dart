@@ -25,9 +25,6 @@ class Homescreen extends StatelessWidget {
             Row(
               children: [
                 const WindowtitleWidget(),
-                const UnminimizeButtonWidget(),
-                const MinimizeButtonWidget(),
-                const CloseButtonWidget()
               ].map((e) {
                 return Padding(
                   padding: const EdgeInsets.only(left: 10),
@@ -43,6 +40,9 @@ class Homescreen extends StatelessWidget {
               const AmdGpuSensorWidget(),
               const CalendarWidget(),
               const BatteryWidget(),
+              const UnminimizeButtonWidget(),
+              const MinimizeButtonWidget(),
+              const CloseButtonWidget()
             ]
                     .map((e) => Padding(
                         padding: const EdgeInsets.only(left: 10), child: e))
