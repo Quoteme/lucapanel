@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dbus/dbus.dart';
 import 'package:flutter/material.dart';
 import 'package:lucapanel/model/workspace.dart';
 
@@ -17,6 +18,14 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
   void initState() {
     super.initState();
     _fetchWorkspaces();
+    Workspace.fromDbusStream().listen((event) {
+      setState(() {
+        workspaces = event;
+      });
+    });
+    Workspace.activeWorkspaceStream().listen((event) {
+      _fetchWorkspaces();
+    });
   }
 
   _fetchWorkspaces() => Workspace.fromWmctrl().then((value) {
@@ -38,7 +47,7 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ElevatedButton(
-              style: workspace.active
+              style: workspace.focused
                   ? ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.blue))
                   : null,

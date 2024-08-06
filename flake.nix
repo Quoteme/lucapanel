@@ -44,6 +44,9 @@
           brightnessctl
           wmctrl
         ];
+        developmentTools = with pkgs; [
+          d-spy # inspecting DBUS interfaces / generating xml files for DBUS interfaces
+        ];
       in
       rec {
 
@@ -67,7 +70,7 @@
             pkg-config
             clang-tools
           ];
-          buildInputs = flutterDependencies ++ additionalDependencies;
+          buildInputs = flutterDependencies ++ additionalDependencies ++ developmentTools;
         });
       }
     );
