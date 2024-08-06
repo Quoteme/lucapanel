@@ -3,6 +3,9 @@ import 'package:lucapanel/widgets/batterywidget.dart';
 import 'package:lucapanel/widgets/calendarwidget.dart';
 import 'package:lucapanel/widgets/screenbrightnesswidget.dart';
 import 'package:lucapanel/widgets/volumewidget.dart';
+import 'package:lucapanel/widgets/windowcontrols/closewidget.dart';
+import 'package:lucapanel/widgets/windowcontrols/minimizewidget.dart';
+import 'package:lucapanel/widgets/windowcontrols/unminimize.dart';
 import 'package:lucapanel/widgets/workspaceswidget.dart';
 
 class Homescreen extends StatelessWidget {
@@ -16,6 +19,15 @@ class Homescreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             WorkspacesWidget(),
+            Row(
+              children: [UnminimizeWidget(), MinimizeWidget(), CloseWidget()]
+                  .map((e) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: e,
+                );
+              }).toList(),
+            ),
             Row(
                 children: [
               const VolumeWidget(),
