@@ -6,6 +6,7 @@ import 'package:lucapanel/widgets/volumewidget.dart';
 import 'package:lucapanel/widgets/windowcontrols/closewidget.dart';
 import 'package:lucapanel/widgets/windowcontrols/minimizewidget.dart';
 import 'package:lucapanel/widgets/windowcontrols/unminimize.dart';
+import 'package:lucapanel/widgets/windowtitlewidget.dart';
 import 'package:lucapanel/widgets/workspaceswidget.dart';
 
 class Homescreen extends StatelessWidget {
@@ -20,8 +21,12 @@ class Homescreen extends StatelessWidget {
           children: <Widget>[
             WorkspacesWidget(),
             Row(
-              children: [UnminimizeWidget(), MinimizeWidget(), CloseWidget()]
-                  .map((e) {
+              children: [
+                WindowtitleWidget(),
+                UnminimizeWidget(),
+                MinimizeWidget(),
+                CloseWidget()
+              ].map((e) {
                 return Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: e,

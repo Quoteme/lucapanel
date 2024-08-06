@@ -24,7 +24,6 @@ class Workspace {
   }
 
   static Stream<List<Workspace>> fromDbusStream() {
-    final List<Workspace> workspaces = [];
     final client = DBusClient.session();
     return DBusSignalStream(
       client,
