@@ -39,6 +39,7 @@
           xorg.libXtst
           cairo.dev
           lerc.dev
+          alsa-lib.dev
         ];
         additionalDependencies = with pkgs; [
           brightnessctl

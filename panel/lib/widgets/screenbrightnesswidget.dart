@@ -25,7 +25,6 @@ class _ScreenBrightnessWidgetState extends State<ScreenBrightnessWidget> {
               value: _brightnessPercentage!,
               allowedInteraction: SliderInteraction.tapOnly,
               onChanged: (x) async {
-                print("lal");
                 brightness = (x * _maxBrightness).round();
                 _getBrightness();
                 setState(() {});
