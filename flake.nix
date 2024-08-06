@@ -41,11 +41,11 @@
           xorg.libXtst
           cairo.dev
           lerc.dev
-          alsa-lib
         ];
         additionalDependencies = with pkgs; [
           brightnessctl
           wmctrl
+          pamixer
         ];
         developmentTools = with pkgs; [
           d-spy # inspecting DBUS interfaces / generating xml files for DBUS interfaces
