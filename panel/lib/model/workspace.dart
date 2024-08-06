@@ -66,10 +66,10 @@ class Workspace {
       path: DBusObjectPath('/general'),
       name: 'WorkspaceChanged',
     ).map((event) {
-      return Workspace(
-          name: (event.values[0] as DBusString).value,
-          focused: (event.values[1] as DBusBoolean).value,
-          visible: (event.values[2] as DBusBoolean).value);
+      return Workspace(name: (event.values[0] as DBusString).value
+          // focused: (event.values[1] as DBusBoolean).value,
+          // visible: (event.values[2] as DBusBoolean).value);
+          );
     });
   }
 }
