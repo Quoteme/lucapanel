@@ -58,12 +58,17 @@
           pname = "lucapanel";
           version = "0.0.1";
 
-          nativeBuildInputs = [ pkg-config clang-tools ];
+          nativeBuildInputs = [ pkg-config makeWrapper ];
 
           buildInputs = flutterDependencies;
 
           src = ./panel;
           autoPubspecLock = ./panel/pubspec.lock;
+
+          preFixup = ''
+            wrapProgram "$out/bin/lucapanel" \
+              --prefix PATH : ${pkgs.lib.makeBinPath additionalDependencies}
+          '';
         });
 
         devShells.default = with pkgs; (mkShell.override { stdenv = clangStdenv; } {
