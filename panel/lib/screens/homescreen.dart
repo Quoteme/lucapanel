@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucapanel/widgets/batterywidget.dart';
 import 'package:lucapanel/widgets/calendarwidget.dart';
 import 'package:lucapanel/widgets/screenbrightnesswidget.dart';
+import 'package:lucapanel/widgets/sensors/cpusensorwidget.dart';
 import 'package:lucapanel/widgets/volumewidget.dart';
 import 'package:lucapanel/widgets/windowcontrols/closebuttonwidget.dart';
 import 'package:lucapanel/widgets/windowcontrols/minimizebuttonwidget.dart';
@@ -37,6 +38,7 @@ class Homescreen extends StatelessWidget {
                 children: [
               const VolumeWidget(),
               const ScreenBrightnessWidget(),
+              CpuSensorWidget(),
               const CalendarWidget(),
               const BatteryWidget(),
             ]
