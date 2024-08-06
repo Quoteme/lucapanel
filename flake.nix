@@ -49,6 +49,12 @@
         ];
         developmentTools = with pkgs; [
           d-spy # inspecting DBUS interfaces / generating xml files for DBUS interfaces
+          (pkgs.writeShellScriptBin "install-lucapanel-to-home" /*bash*/ ''
+            #!/usr/bin/env bash
+            echo "Installing lucapanel to $HOME/.local/bin"
+            nix build
+            cp ./result/bin/lucapanel $HOME/.local/bin
+          '')
         ];
       in
       rec {
