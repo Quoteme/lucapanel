@@ -1,0 +1,31 @@
+<node name="/general">
+    <interface name="org.xmonad.bus">
+        <method name="Layout">
+            <arg
+              name="a"
+              type="s"
+              direction="out"/>
+        </method>
+        <method name="Layouts">
+            <arg
+              name="a"
+              type="as"
+              direction="out"/>
+        </method>
+        <method name="Workspace">
+            <arg
+              name="a"
+              type="s"
+              direction="out"/>
+        </method>
+        <method name="Workspaces">
+            <arg
+              name="a"
+              type="as"
+              direction="out"/>
+        </method>
+        <signal name="LayoutChanged"/>
+        <signal name="WorkspacesChanged"/>
+        <signal name="WorkspaceChanged"/>
+    </interface>
+</node>
