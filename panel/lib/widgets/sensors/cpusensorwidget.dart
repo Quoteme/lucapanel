@@ -7,10 +7,11 @@ class CpuSensorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: CpuSensor().values,
-        builder: (BuildContext context, AsyncSnapshot<List<double>?> snapshot) {
+        stream: CpuSensor().valuesBuffered(bufferSize: 10),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<List<double>>> snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data!.first.toString());
+            return Text(snapshot.data!.toString());
           } else {
             return const CircularProgressIndicator();
           }

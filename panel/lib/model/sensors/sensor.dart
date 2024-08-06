@@ -42,4 +42,15 @@ class Sensor {
       yield files;
     }
   }
+
+  Stream<List<List<double>>> valuesBuffered({int bufferSize = 3}) async* {
+    final buffer = <List<double>>[];
+    await for (var values in values.where((values) => values != null)) {
+      buffer.add(values!);
+      if (buffer.length > bufferSize) {
+        buffer.removeAt(0);
+      }
+      yield buffer;
+    }
+  }
 }
