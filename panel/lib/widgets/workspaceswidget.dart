@@ -39,6 +39,14 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
     _fetchWorkspaces();
   }
 
+  _moveToWorkspace(Workspace workspace) async {
+    var window = (await Process.run('xdotool', ['getactivewindow']))
+        .stdout
+        .toString()
+        .trim();
+    Process.run('wmctrl', ['-ir', window, '-t', workspace.name]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -53,6 +61,7 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
                   : null,
               child: Text(workspace.name),
               onPressed: () => _goToWorkspace(workspace),
+              onLongPress: () => _moveToWorkspace(workspace),
             ),
           ),
       ],
