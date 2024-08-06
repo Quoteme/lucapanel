@@ -1,18 +1,25 @@
 import 'dart:io';
 
 class Sensor {
-  Directory hwmonDirectory;
+  Directory? _cachedHwmonDirectory;
 
-  Sensor({required this.hwmonDirectory});
+  String get sensorName => "k10temp";
+
+  Future<Directory?> get hwmonDirectory async {
+    _cachedHwmonDirectory ??= Directory("/sys/class/hwmon")
+        .listSync()
+        .whereType<Directory>()
+        .firstWhere((dir) =>
+            File("${dir.path}/name").readAsStringSync().contains(sensorName));
+    return _cachedHwmonDirectory;
+  }
 
   /// Content of the file with the given [name] in the [hwmonDirectory].
-  Future<String> get name async => hwmonDirectory
-      .listSync()
+  Future<String?> get name async => (await hwmonDirectory)
+      ?.listSync()
       .whereType<File>()
       .firstWhere((file) => file.path.endsWith("name"))
       .readAsString();
-
-  String get unit => "N/A";
 
   get updateInterval => const Duration(seconds: 1);
 
@@ -23,21 +30,16 @@ class Sensor {
   double get minValue => 0;
 
   // periodically read the `temp1_input` file and return the value
-  Stream<List<double>> get values => Stream.periodic(
-        updateInterval,
-        (_) => hwmonDirectory
-            .listSync()
-            .whereType<File>()
-            .where((file) => valueFiles.contains(file.path.split("/").last))
-            .map((file) => double.parse(file.readAsStringSync()) / 1000)
-            .toList(),
-      );
-
-  static Future<List<Sensor>> listAll() async {
-    List<Directory> hwmonDirectories = Directory("/sys/class/hwmon")
-        .listSync()
-        .whereType<Directory>()
-        .toList();
-    return hwmonDirectories.map((dir) => Sensor(hwmonDirectory: dir)).toList();
+  Stream<List<double>?> get values async* {
+    await for (var _ in Stream.periodic(updateInterval)) {
+      final directory = await hwmonDirectory;
+      final files = directory
+          ?.listSync()
+          .whereType<File>()
+          .where((file) => valueFiles.contains(file.path.split("/").last))
+          .map((file) => double.parse(file.readAsStringSync()) / 1000)
+          .toList();
+      yield files;
+    }
   }
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:lucapanel/model/sensors/cpusensor.dart';
+import 'package:lucapanel/model/sensors/amdgpu.dart';
 
-class CpuSensorWidget extends StatelessWidget {
-  const CpuSensorWidget({Key? key}) : super(key: key);
+class AmdGpuSensorWidget extends StatelessWidget {
+  const AmdGpuSensorWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: CpuSensor().values,
+        stream: AmdGpuSensor().values,
         builder: (BuildContext context, AsyncSnapshot<List<double>?> snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.first.toString());
