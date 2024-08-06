@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lucapanel/model/minimizedWindow.dart';
 import 'package:lucapanel/widgets/unminimizewidget.dart';
@@ -11,6 +13,7 @@ class Unminimizescreen extends StatefulWidget {
 
 class _UnminimizescreenState extends State<Unminimizescreen> {
   List<Minimizedwindow> minimizedWindows = [];
+  late StreamSubscription<List<Minimizedwindow>> _minimizedWindowsSubscription;
 
   @override
   void initState() {
@@ -20,11 +23,18 @@ class _UnminimizescreenState extends State<Unminimizescreen> {
         minimizedWindows = value;
       });
     });
-    Minimizedwindow.fromDBusStream.listen((event) {
+    _minimizedWindowsSubscription =
+        Minimizedwindow.fromDBusStream.listen((event) {
       setState(() {
         minimizedWindows = event;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _minimizedWindowsSubscription.cancel();
+    super.dispose();
   }
 
   @override
