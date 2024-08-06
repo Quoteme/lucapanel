@@ -13,13 +13,15 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        flutterDependencies = with pkgs; [
+        flutterTooling = with pkgs; [
           flutter
           cmake
           ninja
           bear
-          fontconfig
           pkg-config
+        ];
+        flutterDependencies = with pkgs; [
+          fontconfig
           # Dependencies for flutter
           glib
           at-spi2-core.dev
@@ -39,11 +41,11 @@
           xorg.libXtst
           cairo.dev
           lerc.dev
-          alsa-lib.dev
         ];
         additionalDependencies = with pkgs; [
           brightnessctl
           wmctrl
+          pamixer
         ];
         developmentTools = with pkgs; [
           d-spy # inspecting DBUS interfaces / generating xml files for DBUS interfaces
@@ -52,18 +54,21 @@
       rec {
 
         defaultPackage = packages.lucapanel;
-        packages.lucapanel = with pkgs; clangStdenv.mkDerivation (finalAttrs: {
+        packages.lucapanel = with pkgs; flutter322.buildFlutterApplication (rec {
           pname = "lucapanel";
-          version = "1.0";
+          version = "0.0.1";
 
-          src = ./.;
+          nativeBuildInputs = [ pkg-config makeWrapper ];
 
-          nativeBuildInputs = [
-            makeWrapper
-          ];
-          buildInputs = [
-            flutter
-          ];
+          buildInputs = flutterDependencies;
+
+          src = ./panel;
+          autoPubspecLock = ./panel/pubspec.lock;
+
+          preFixup = ''
+            wrapProgram "$out/bin/lucapanel" \
+              --prefix PATH : ${pkgs.lib.makeBinPath additionalDependencies}
+          '';
         });
 
         devShells.default = with pkgs; (mkShell.override { stdenv = clangStdenv; } {
@@ -71,7 +76,7 @@
             pkg-config
             clang-tools
           ];
-          buildInputs = flutterDependencies ++ additionalDependencies ++ developmentTools;
+          buildInputs = flutterTooling ++ flutterDependencies ++ additionalDependencies ++ developmentTools;
         });
       }
     );

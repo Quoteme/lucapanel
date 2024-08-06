@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 
 class VolumeWidget extends StatefulWidget {
   const VolumeWidget({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class VolumeWidget extends StatefulWidget {
 
 class _VolumeWidgetState extends State<VolumeWidget> {
   bool _expanded = false;
-  double? _volume;
+  int? _volume;
   bool? _mute;
 
   @override
@@ -27,10 +28,12 @@ class _VolumeWidgetState extends State<VolumeWidget> {
           : _volume == null
               ? CircularProgressIndicator()
               : Slider(
-                  value: _volume!,
+                  value: _volume!.toDouble(),
+                  min: 0,
+                  max: 100,
                   allowedInteraction: SliderInteraction.tapOnly,
                   onChanged: (v) {
-                    FlutterVolumeController.setVolume(v);
+                    _setVolume(v.round());
                     _fetchVolume();
                   }));
 
@@ -58,16 +61,26 @@ class _VolumeWidgetState extends State<VolumeWidget> {
   }
 
   void _fetchVolume() async {
-    final vol = await FlutterVolumeController.getVolume();
+    final result = (await Process.run('pamixer', ['--get-volume']))
+        .stdout
+        .toString()
+        .trim();
+    final vol = int.tryParse(result) ?? 0;
     setState(() {
       _volume = vol;
     });
   }
 
   void _fetchMute() async {
-    final mute = await FlutterVolumeController.getMute();
+    final result =
+        (await Process.run('pamixer', ['--get-mute'])).stdout.toString().trim();
+    final mute = result == 'true';
     setState(() {
       _mute = mute;
     });
+  }
+
+  void _setVolume(int v) {
+    Process.run('pamixer', ['--set-volume', v.toString()]);
   }
 }
