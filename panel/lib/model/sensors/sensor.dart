@@ -1,6 +1,10 @@
 import 'dart:io';
 
 class Sensor {
+  Duration updateInterval;
+
+  Sensor({this.updateInterval = const Duration(seconds: 1)});
+
   Directory? _cachedHwmonDirectory;
 
   String get sensorName => "k10temp";
@@ -21,13 +25,13 @@ class Sensor {
       .firstWhere((file) => file.path.endsWith("name"))
       .readAsString();
 
-  get updateInterval => const Duration(seconds: 1);
-
   get valueFiles => ["temp1_input"];
 
   double get maxValue => 100;
 
   double get minValue => 0;
+
+  String get unit => "°C";
 
   // periodically read the `temp1_input` file and return the value
   Stream<List<double>?> get values async* {
