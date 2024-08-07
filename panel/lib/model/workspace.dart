@@ -56,19 +56,4 @@ class Workspace {
       );
     }).toList();
   }
-
-  static Stream<Workspace> activeWorkspaceStream() {
-    final client = DBusClient.session();
-    return DBusSignalStream(
-      client,
-      interface: 'org.xmonad.bus',
-      path: DBusObjectPath('/general'),
-      name: 'WorkspaceChanged',
-    ).map((event) {
-      return Workspace(name: (event.values[0] as DBusString).value
-          // focused: (event.values[1] as DBusBoolean).value,
-          // visible: (event.values[2] as DBusBoolean).value);
-          );
-    });
-  }
 }

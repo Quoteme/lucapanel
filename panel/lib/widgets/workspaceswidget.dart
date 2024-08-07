@@ -23,19 +23,16 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
         workspaces = event;
       });
     });
-    Workspace.activeWorkspaceStream().listen((event) {
-      _fetchWorkspaces();
-    });
   }
 
-  _fetchWorkspaces() => Workspace.fromWmctrl().then((value) {
+  _fetchWorkspaces() => Workspace.fromDbusMethod().then((value) {
         setState(() {
           workspaces = value;
         });
       });
 
-  _goToWorkspace(Workspace workspace) {
-    Process.run('wmctrl', ['-s', workspace.name]);
+  _goToWorkspace(Workspace workspace) async {
+    await Process.run('wmctrl', ['-s', workspace.name]);
     _fetchWorkspaces();
   }
 
