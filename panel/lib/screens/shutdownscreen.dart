@@ -47,7 +47,7 @@ class ShutdownScreen extends StatelessWidget {
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.orange),
             foregroundColor: MaterialStateProperty.all(Colors.black)),
-        onPressed: () => Process.run('gnome-session-quit', ['--logout']),
+        onPressed: () => Process.run('killall', ['.xmonad-luca-wrapped']),
         icon: const Icon(Icons.logout),
         label: const Text('Logout'),
       );
