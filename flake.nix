@@ -57,6 +57,7 @@
             echo "Installing lucapanel to $HOME/.local/bin"
             nix build
             cp ./result/bin/lucapanel $HOME/.local/bin
+            chmod +rwx $HOME/.local/bin/lucapanel
           '')
         ];
       in
