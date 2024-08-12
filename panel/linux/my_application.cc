@@ -19,17 +19,24 @@ G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
 void set_net_wm_strut_partial(GtkWindow *window, int width = 1200,
                               int height = 32) {
-  GdkWindow *gdkWindow = gtk_widget_get_window(GTK_WIDGET(window));
-  Display *display = GDK_WINDOW_XDISPLAY(gdkWindow);
+#ifdef GDK_WINDOWING_X11
+  GdkScreen *screen = gtk_window_get_screen(window);
+  if (GDK_IS_X11_SCREEN(screen)) {
+    GdkWindow *gdkWindow = gtk_widget_get_window(GTK_WIDGET(window));
+    Display *display = GDK_WINDOW_XDISPLAY(gdkWindow);
 
-  Window xwindow = GDK_WINDOW_XID(gdkWindow);
+    Window xwindow = GDK_WINDOW_XID(gdkWindow);
 
-  Atom property = XInternAtom(display, "_NET_WM_STRUT_PARTIAL", False);
-  long strut[12] = {0, 0, height, 0, 0, 0, 0, 0, 0, width, 0, 0};
+    Atom property = XInternAtom(display, "_NET_WM_STRUT_PARTIAL", False);
+    long strut[12] = {0, 0, height, 0, 0, 0, 0, 0, 0, width, 0, 0};
 
-  XChangeProperty(display, xwindow, property, XA_CARDINAL, 32, PropModeReplace,
-                  (unsigned char *)strut, 12);
-  XFlush(display);
+    XChangeProperty(display, xwindow, property, XA_CARDINAL, 32,
+                    PropModeReplace, (unsigned char *)strut, 12);
+    XFlush(display);
+  }
+#endif
+  // On Wayland, the compositor should handle the reservation of space for
+  // panels.
 }
 
 // Implements GApplication::activate.

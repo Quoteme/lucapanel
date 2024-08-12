@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lucapanel/model/minimizedWindow.dart';
+import 'package:lucapanel/widgets/backbuttonwidget.dart';
 import 'package:lucapanel/widgets/unminimizewidget.dart';
 
 class Unminimizescreen extends StatefulWidget {
@@ -43,13 +44,7 @@ class _UnminimizescreenState extends State<Unminimizescreen> {
       body: SingleChildScrollView(
         child: Row(
           children: [
-            FilledButton.icon(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back),
-              label: const Text("Back"),
-            ),
+            const BackButtonWidget(),
             Row(
               children: minimizedWindows.map((win) {
                 return Padding(

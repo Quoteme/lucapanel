@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lucapanel/screens/shutdownscreen.dart';
 
 class CloseButtonWidget extends StatelessWidget {
   const CloseButtonWidget({super.key});
@@ -17,6 +18,8 @@ class CloseButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: _closeFocusedWindow,
+      onLongPress: () => Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ShutdownScreen())),
       child: const Icon(Icons.circle, color: Colors.red),
     );
   }
