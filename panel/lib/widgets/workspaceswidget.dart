@@ -25,14 +25,14 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
     });
   }
 
-  _fetchWorkspaces() => Workspace.fromDbusMethod().then((value) {
+  _fetchWorkspaces() => Workspace.fromWmctrl().then((value) {
         setState(() {
           workspaces = value;
         });
       });
 
   _goToWorkspace(Workspace workspace) async {
-    await Process.run('wmctrl', ['-s', workspace.name]);
+    await Process.run('wmctrl', ['-s', workspace.index.toString()]);
     _fetchWorkspaces();
   }
 
@@ -41,7 +41,7 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
         .stdout
         .toString()
         .trim();
-    Process.run('wmctrl', ['-ir', window, '-t', workspace.name]);
+    Process.run('wmctrl', ['-ir', window, '-t', workspace.index.toString()]);
   }
 
   @override
