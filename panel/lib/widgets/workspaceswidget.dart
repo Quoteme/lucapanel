@@ -44,6 +44,16 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
     Process.run('wmctrl', ['-ir', window, '-t', workspace.index.toString()]);
   }
 
+  _backgroundColor(Workspace workspace) {
+    if (workspace.visible) {
+      return Colors.blue;
+    } else if (workspace.focused) {
+      return Colors.blueGrey;
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -52,10 +62,9 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ElevatedButton(
-              style: workspace.focused
-                  ? ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue))
-                  : null,
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(_backgroundColor(workspace))),
               child: Text(workspace.name),
               onPressed: () => _goToWorkspace(workspace),
               onLongPress: () => _moveToWorkspace(workspace),
