@@ -39,7 +39,7 @@ class Homescreen extends StatelessWidget {
               const CpuSensorWidget(),
               const AmdGpuSensorWidget(),
               const CalendarWidget(),
-              const BatteryWidget(),
+              BatteryWidget(),
               const UnminimizeButtonWidget(),
               const MinimizeButtonWidget(),
               const CloseButtonWidget()
