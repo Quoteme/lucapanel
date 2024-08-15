@@ -62,22 +62,22 @@ class _BatteryWidgetState extends State<BatteryWidget> {
     switch (_batteryLevel) {
       case null:
         return Icons.battery_unknown;
-      case >= 100 - stepSize:
-        return Icons.battery_full;
-      case >= 100 - stepSize * 2:
-        return Icons.battery_6_bar;
-      case >= 100 - stepSize * 3:
-        return Icons.battery_5_bar;
-      case >= 100 - stepSize * 4:
-        return Icons.battery_4_bar;
-      case >= 100 - stepSize * 5:
-        return Icons.battery_3_bar;
-      case >= 100 - stepSize * 6:
-        return Icons.battery_2_bar;
-      case >= 100 - stepSize * 7:
-        return Icons.battery_1_bar;
+      // case >= 100 - stepSize:
+      //   return Icons.battery_full;
+      // case >= 100 - stepSize * 2:
+      //   return Icons.battery_6_bar;
+      // case >= 100 - stepSize * 3:
+      //   return Icons.battery_5_bar;
+      // case >= 100 - stepSize * 4:
+      //   return Icons.battery_4_bar;
+      // case >= 100 - stepSize * 5:
+      //   return Icons.battery_3_bar;
+      // case >= 100 - stepSize * 6:
+      //   return Icons.battery_2_bar;
+      // case >= 100 - stepSize * 7:
+      //   return Icons.battery_1_bar;
       default:
-        return Icons.battery_alert;
+        return Icons.battery_full;
     }
   }
 
@@ -122,10 +122,7 @@ class _BatteryWidgetState extends State<BatteryWidget> {
               child: Text(
                 ' $_batteryLevel',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: _textColor(), shadows: const [
-                  Shadow(
-                      color: Colors.black, offset: Offset(1, 1), blurRadius: 2)
-                ]),
+                style: TextStyle(color: _textColor(), shadows: const []),
               ),
             ),
           ]),
