@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:lucapanel/model/sensors/sensor.dart';
 
 class AmdGpuSensor extends Sensor {
-  AmdGpuSensor({Duration updateInterval = const Duration(seconds: 1)})
-      : super(updateInterval: updateInterval);
+  AmdGpuSensor({super.updateInterval}) : super();
 
   @override
   String get sensorName => "amdgpu";

@@ -3,7 +3,7 @@ import 'dart:io';
 class Sensor {
   Duration updateInterval;
 
-  Sensor({this.updateInterval = const Duration(seconds: 1)});
+  Sensor({this.updateInterval = const Duration(seconds: 10)});
 
   Directory? _cachedHwmonDirectory;
 

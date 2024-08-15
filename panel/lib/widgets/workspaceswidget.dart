@@ -23,9 +23,6 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
         workspaces = event;
       });
     });
-    Workspace.activeWorkspaceStream().listen((event) {
-      _fetchWorkspaces();
-    });
   }
 
   _fetchWorkspaces() => Workspace.fromWmctrl().then((value) {
@@ -34,9 +31,27 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
         });
       });
 
-  _goToWorkspace(Workspace workspace) {
-    Process.run('wmctrl', ['-s', workspace.name]);
+  _goToWorkspace(Workspace workspace) async {
+    await Process.run('wmctrl', ['-s', workspace.index.toString()]);
     _fetchWorkspaces();
+  }
+
+  _moveToWorkspace(Workspace workspace) async {
+    var window = (await Process.run('xdotool', ['getactivewindow']))
+        .stdout
+        .toString()
+        .trim();
+    Process.run('wmctrl', ['-ir', window, '-t', workspace.index.toString()]);
+  }
+
+  _backgroundColor(Workspace workspace) {
+    if (workspace.visible) {
+      return Colors.blue;
+    } else if (workspace.focused) {
+      return Colors.blueGrey;
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -47,12 +62,12 @@ class _WorkspacesWidgetState extends State<WorkspacesWidget> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ElevatedButton(
-              style: workspace.focused
-                  ? ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue))
-                  : null,
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(_backgroundColor(workspace))),
               child: Text(workspace.name),
               onPressed: () => _goToWorkspace(workspace),
+              onLongPress: () => _moveToWorkspace(workspace),
             ),
           ),
       ],

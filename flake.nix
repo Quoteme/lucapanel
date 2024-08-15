@@ -49,6 +49,16 @@
         ];
         developmentTools = with pkgs; [
           d-spy # inspecting DBUS interfaces / generating xml files for DBUS interfaces
+          neocmakelsp
+          cmake-lint
+          cmake-format
+          (pkgs.writeShellScriptBin "install-lucapanel-to-home" /*bash*/ ''
+            #!/usr/bin/env bash
+            echo "Installing lucapanel to $HOME/.local/bin"
+            nix build
+            cp ./result/bin/lucapanel $HOME/.local/bin
+            chmod +rwx $HOME/.local/bin/lucapanel
+          '')
         ];
       in
       rec {
