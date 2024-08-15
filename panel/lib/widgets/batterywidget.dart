@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
 
 class BatteryWidget extends StatefulWidget {
-  const BatteryWidget({Key? key}) : super(key: key);
+  Duration updateInterval;
+  BatteryWidget({this.updateInterval = const Duration(seconds: 5), Key? key})
+      : super(key: key);
 
   @override
   State<BatteryWidget> createState() => _BatteryWidgetState();
@@ -12,6 +15,7 @@ class BatteryWidget extends StatefulWidget {
 
 class _BatteryWidgetState extends State<BatteryWidget> {
   int? _batteryLevel;
+  double? _powerUsage;
   BatteryState? _batteryState;
 
   @override
@@ -37,6 +41,17 @@ class _BatteryWidgetState extends State<BatteryWidget> {
     Battery().onBatteryStateChanged.listen((BatteryState state) {
       setState(() {
         _batteryState = state;
+      });
+    });
+    Timer.periodic(widget.updateInterval, (Timer timer) {
+      Process.run('cat', ['/sys/class/power_supply/BAT0/power_now'])
+          .then((ProcessResult result) {
+        final powerUsage = int.tryParse(result.stdout.toString());
+        if (powerUsage != null) {
+          setState(() {
+            _powerUsage = powerUsage / 1e6;
+          });
+        }
       });
     });
   }
@@ -66,7 +81,7 @@ class _BatteryWidgetState extends State<BatteryWidget> {
     }
   }
 
-  _iconColor() {
+  Color _iconColor() {
     switch (_batteryState) {
       case BatteryState.charging:
         return Colors.lightGreen;
@@ -83,12 +98,39 @@ class _BatteryWidgetState extends State<BatteryWidget> {
     }
   }
 
+  Color _textColor() {
+    // rotated icon color hue by 180 degrees
+    return Color.fromARGB(255, 255 - _iconColor().red, 255 - _iconColor().green,
+        255 - _iconColor().blue);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Icon(_icon(), color: _iconColor()),
-        Text('$_batteryLevel%'),
+        SizedBox(
+          width: 32,
+          child: Stack(children: [
+            RotatedBox(
+                quarterTurns: -1,
+                child: Icon(
+                  _icon(),
+                  color: _iconColor(),
+                  size: 32,
+                )),
+            Center(
+              child: Text(
+                ' $_batteryLevel',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: _textColor(), shadows: const [
+                  Shadow(
+                      color: Colors.black, offset: Offset(1, 1), blurRadius: 2)
+                ]),
+              ),
+            ),
+          ]),
+        ),
+        Text('$_powerUsage W')
       ],
     );
   }
