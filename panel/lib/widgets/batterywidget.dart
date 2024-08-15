@@ -130,7 +130,7 @@ class _BatteryWidgetState extends State<BatteryWidget> {
             ),
           ]),
         ),
-        Text('$_powerUsage W')
+        if (_powerUsage != null) Text('${_powerUsage!.toStringAsFixed(2)} W'),
       ],
     );
   }
